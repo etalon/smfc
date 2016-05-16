@@ -1,0 +1,87 @@
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="/javascripts/angularApp.js"></script>
+    <style>
+        .glyphicon-thumbs-up {
+            cursor: pointer
+        }
+    </style>
+</head>
+
+<body ng-app="SMFC">
+    <div class="container-fluid">
+        <div>
+            <ui-view>SMFC</ui-view>
+        </div>
+
+        <ul ng-show="errors && errors.length">
+            <li ng-repeat="error in errors">1) {{error}}</li>
+        </ul>
+        
+        <script type="text/ng-template" id="/home.html">
+            <ul>
+                <li><a href="#/supermarketgroupsoverview">Supermarktketten</a></li>
+            </ul>
+        </script>
+        <script type="text/ng-template" id="/supermarketgroupsoverview.html">
+            <div class="page-header">
+                <h1>Supermarktketten</h1>
+            </div>
+
+            <div ng-repeat="smg in supermarketgroups | orderBy: '+name'">
+            {{smg.name}}
+                <span>
+  <a href="#/supermarketgroups/{{$index}}">Edit</a> |
+  <button ng-click="deleteSupermarketGroup(smg)">Delete</button>
+</span>
+            </div>
+            <hr/>
+            <form ng-submit="addSupermarketGroup()">
+                <input type="text" placeholder="Name" ng-model="name"></input>
+                <button type="submit" class="btn-default">Post</button>
+            </form>
+    </div>
+
+    </script>
+    <script type="text/ng-template" id="/supermarketgroups.html">
+        <div class="page-header">
+            <h3>
+                {{post.title}}
+                <a ng-show="post.link" href="{{post.link}}">
+                    {{post.title}}
+                </a>
+                <span ng-hide="post.link">
+                    {{post.title}}
+                </span>
+            </h3>
+        </div>
+        <div ng-repeat="comment in post.comments | orderBy:'-upvotes'">
+            <span class="glyphicon glyphicon-thumbs-up" ng-click="incrementUpvotes(comment)"></span> {{comment.upvotes}} - by {{comment.author}}
+            <span style="font-size:20px; margin-left:10px;">
+      {{comment.body}}
+    </span>
+        </div>
+
+        <form ng-submit="addComment()">
+            <h3>Add a new comment</h3>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Comment" ng-model="body"></input>
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+
+    </script>
+</body>
+
+</html>
